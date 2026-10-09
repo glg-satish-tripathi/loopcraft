@@ -1,0 +1,21 @@
+{
+  "name": "satish-spec-loop",
+  "version": "0.0.1",
+  "description": "Spec-driven development workflow as Agent Skills for Claude Code, Codex and pi",
+  "type": "module",
+  "bin": {
+    "specloop": "bin/specloop.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "skills"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test"
+  }
+}
