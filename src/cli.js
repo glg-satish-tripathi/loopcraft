@@ -2,9 +2,10 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { parseArgs } from "node:util";
 import { AGENT_DIRS, init } from "./init.js";
+import { homedir } from "node:os";
 
 const USAGE = `Usage:
-  specloop init --agent <${Object.keys(AGENT_DIRS).join("|")}> [--dir <path>] [--dry-run] [--force]
+  specloop init --agent <${Object.keys(AGENT_DIRS).join("|")}> [--dir <path>] [--global] [--dry-run] [--force]
   specloop --version`;
 
 export function main(argv, out = console) {
@@ -16,6 +17,7 @@ export function main(argv, out = console) {
       options: {
         agent: { type: "string" },
         dir: { type: "string", default: "." },
+        global: { type: "boolean", default: false },
         "dry-run": { type: "boolean", default: false },
         force: { type: "boolean", default: false },
         version: { type: "boolean", default: false },
@@ -46,7 +48,8 @@ export function main(argv, out = console) {
   try {
     results = init({
       agent: values.agent,
-      target: resolve(values.dir),
+      target: values.global ? homedir() : resolve(values.dir),
+      global: values.global,
       dryRun: values["dry-run"],
       force: values.force,
     });

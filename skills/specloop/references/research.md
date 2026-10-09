@@ -1,12 +1,12 @@
 ---
-name: specloop-research
+name: specloop-research-reference
 description: Gather verified facts about a GitHub issue or described task before or during planning, and record them in specs/<id>-slug/research.md with sources. Use when the user says "research", when the task touches code or systems you have not read yet, or when planning hits a question that needs evidence instead of a guess.
 license: MIT
 ---
 
 # Research
 
-Find out what is true before deciding what to do. Facts and sources only; the decision belongs to `specloop-plan`.
+Find out what is true before deciding what to do. Facts and sources only; the decision belongs to the main `specloop` workflow.
 
 ## Steps
 
@@ -14,7 +14,7 @@ Find out what is true before deciding what to do. Facts and sources only; the de
 2. **Pick the work directory** `specs/<id>-slug/`: `<id>` is the issue number, or the next free `NNN` if there is no issue; `slug` is 2-4 kebab-case words. Reuse the directory if it already exists.
 3. **List the questions** that must be answered before planning, at most seven.
 4. **Answer each from evidence:** read the relevant code, tests and docs in the repo, run read-only commands, and search the web or official docs when the question is about an external tool or API. Do not answer from memory.
-5. **Write `research.md`** from [assets/research-template.md](assets/research-template.md). Every finding cites its source (`path:line`, command output or URL). Put anything you could not confirm under "Unverified".
+5. **Write `research.md`** from [assets/research-template.md](../assets/research-template.md). Every finding cites its source (`path:line`, command output or URL). Put anything you could not confirm under "Unverified".
 6. **Stop for review.** Summarise the findings and the open unknowns, say whether the task is ready to plan, give the path to `research.md`, and ask the user to review it and correct anything wrong. Do not start planning until they say to go on.
 
 ## Principles
@@ -32,4 +32,4 @@ Find out what is true before deciding what to do. Facts and sources only; the de
 - If research shows the task is unclear or two readings are plausible, say so and ask the user instead of choosing.
 - Write only `research.md`. Research can be re-run during planning; append, do not overwrite earlier findings.
 
-**Next:** `specloop-plan`, once the user has reviewed the research. To end the session first, use `specloop-handoff`.
+**Next:** return to the main `specloop` workflow once the user has reviewed the research.

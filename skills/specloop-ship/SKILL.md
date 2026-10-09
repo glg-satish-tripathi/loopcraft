@@ -10,12 +10,12 @@ Publish verified work. Commits, pushes and PRs are outward-facing, so each one n
 
 ## Steps
 
-1. **Check preconditions.** Read `tasks.md`: every task must be `Verified: pass` and the final check from `specloop-verify` must be done. If not, stop and recommend `specloop-verify`.
+1. **Check preconditions.** Read `tasks.md`: every task must be `Verified: pass` and the final check from the main `specloop` workflow must be done. If not, stop and recommend `specloop` verification.
 2. **Show the state:** `git branch --show-current`, `git status --short`, `git diff --stat`. If on the default branch, propose a branch name and ask before creating it.
 3. **Propose the commit(s):** one per task or a single one, as the user prefers, with messages that match the style in `git log`. Follow the user's own instructions about attribution lines. Show them and ask before committing.
-4. **Draft the PR** from the summary `specloop-verify` produced: title, body, and `Closes #<n>` only if the work came from an issue. Show the exact title and body.
+4. **Draft the PR** from the verification summary: title, body, and `Closes #<n>` only if the work came from an issue. Show the exact title and body.
 5. **Push and open the PR only after the user confirms** the exact action, using `git push` and `gh pr create`.
-6. Suggest `specloop-handoff` to record that the work is shipped.
+6. Suggest the handoff phase in `specloop` to record that the work is shipped.
 
 ## Rules
 
@@ -23,4 +23,4 @@ Publish verified work. Commits, pushes and PRs are outward-facing, so each one n
 - Never stage unrelated files; stage by name.
 - Do not comment on or close the issue except through the PR the user approved.
 
-**Next:** `specloop-handoff` to record the shipped state.
+**Next:** the handoff phase in `specloop` to record the shipped state.

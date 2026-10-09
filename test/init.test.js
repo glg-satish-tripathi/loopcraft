@@ -1,10 +1,10 @@
 import assert from "node:assert/strict";
-import { existsSync, mkdtempSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 import { main } from "../src/cli.js";
-import { AGENT_DIRS, SKILLS_DIR, init } from "../src/init.js";
+import { AGENT_DIRS, GLOBAL_AGENT_DIRS, SKILLS_DIR, init } from "../src/init.js";
 
 const tmp = () => mkdtempSync(join(tmpdir(), "specloop-"));
 const quiet = { log() {}, error() {} };
@@ -12,15 +12,23 @@ const quiet = { log() {}, error() {} };
 test("claude installs under .claude/skills", () => {
   const target = tmp();
   init({ agent: "claude", target });
-  assert.ok(existsSync(join(target, ".claude/skills/specloop-plan/SKILL.md")));
-  assert.ok(existsSync(join(target, ".claude/skills/specloop-plan/assets/plan-template.md")));
+  assert.ok(existsSync(join(target, ".claude/skills/specloop/SKILL.md")));
+  assert.ok(existsSync(join(target, ".claude/skills/specloop/assets/plan-template.md")));
 });
 
 test("codex and pi install under .agents/skills", () => {
   for (const agent of ["codex", "pi"]) {
     const target = tmp();
     init({ agent, target });
-    assert.ok(existsSync(join(target, ".agents/skills/specloop-plan/SKILL.md")), agent);
+    assert.ok(existsSync(join(target, ".agents/skills/specloop/SKILL.md")), agent);
+  }
+});
+
+test("global install uses each agent's user skill directory", () => {
+  for (const agent of Object.keys(GLOBAL_AGENT_DIRS)) {
+    const target = tmp();
+    init({ agent, target, global: true });
+    assert.ok(existsSync(join(target, GLOBAL_AGENT_DIRS[agent], "specloop/SKILL.md")), agent);
   }
 });
 
@@ -31,10 +39,23 @@ test("second run is a no-op", () => {
   assert.ok(again.every((r) => r.action === "unchanged"));
 });
 
+test("rerun updates files installed by an earlier run", () => {
+  const target = tmp();
+  const source = tmp();
+  mkdirSync(join(source, "demo"));
+  const sourceFile = join(source, "demo/SKILL.md");
+  writeFileSync(sourceFile, "version one");
+  init({ agent: "pi", target, skillsDir: source });
+  writeFileSync(sourceFile, "version two");
+  const results = init({ agent: "pi", target, skillsDir: source });
+  assert.ok(results.some((r) => r.action === "update"));
+  assert.equal(readFileSync(join(target, ".agents/skills/demo/SKILL.md"), "utf8"), "version two");
+});
+
 test("edited file is kept as conflict, overwritten with force", () => {
   const target = tmp();
   init({ agent: "claude", target });
-  const file = join(target, ".claude/skills/specloop-plan/SKILL.md");
+  const file = join(target, ".claude/skills/specloop/SKILL.md");
   writeFileSync(file, "mine");
   const kept = init({ agent: "claude", target });
   assert.ok(kept.some((r) => r.action === "conflict"));
@@ -62,48 +83,35 @@ test("cli: version and usage exit codes", () => {
   assert.equal(main(["bogus"], quiet), 2);
 });
 
-const STAGES = ["start", "research", "plan", "adr", "tasks", "implement", "verify", "handoff", "resume", "ship"];
-const PRINCIPLED = ["start", "research", "plan", "tasks", "implement"];
+const SKILLS = ["specloop", "specloop-adr", "specloop-ship"];
 
-test("all workflow stages ship as valid skills", () => {
-  assert.deepEqual(readdirSync(SKILLS_DIR), ["specloop"]);
-  const srcRoot = join(SKILLS_DIR, "specloop");
-  assert.deepEqual(readdirSync(srcRoot).sort(), [...STAGES].sort());
-  for (const stage of STAGES) {
-    const installed = `specloop-${stage}`; // the directory name tools discover; must equal `name`
-    const skill = readFileSync(join(srcRoot, stage, "SKILL.md"), "utf8");
-    assert.match(skill, new RegExp(`^name: ${installed}$`, "m"), `${stage}: name must equal ${installed}`);
+test("global workflow ships as three valid skills", () => {
+  assert.deepEqual(readdirSync(SKILLS_DIR).sort(), [...SKILLS].sort());
+  for (const installed of SKILLS) {
+    const skill = readFileSync(join(SKILLS_DIR, installed, "SKILL.md"), "utf8");
+    assert.match(skill, new RegExp(`^name: ${installed}$`, "m"), `${installed}: name must match directory`);
     assert.match(installed, /^[a-z0-9]+(-[a-z0-9]+)*$/);
     assert.ok(installed.length <= 64);
     const desc = skill.match(/^description: (.+)$/m)?.[1] ?? "";
-    assert.ok(desc.length > 0 && desc.length <= 1024, `${stage}: description length`);
-    assert.ok(skill.split("\n").length < 500, `${stage}: SKILL.md under 500 lines`);
-    for (const [, link] of skill.matchAll(/\]\((assets\/[^)]+)\)/g)) {
-      assert.ok(existsSync(join(srcRoot, stage, link)), `${stage}: broken link ${link}`);
+    assert.ok(desc.length > 0 && desc.length <= 1024, `${installed}: description length`);
+    assert.ok(skill.split("\n").length < 500, `${installed}: SKILL.md under 500 lines`);
+    for (const [, link] of skill.matchAll(/\]\(([^)]+)\)/g)) {
+      if (link.startsWith("http")) continue;
+      assert.ok(existsSync(join(SKILLS_DIR, installed, link)), `${installed}: broken link ${link}`);
     }
-    assert.match(skill, /^\*\*Next:\*\*/m, `${stage}: needs a **Next:** line`);
-    for (const [, ref] of skill.matchAll(/`(specloop-[a-z]+)`/g)) {
-      assert.ok(STAGES.includes(ref.slice("specloop-".length)), `${stage}: references unknown skill ${ref}`);
+    assert.match(skill, /^\*\*Next:\*\*/m, `${installed}: needs a **Next:** line`);
+    for (const [, ref] of skill.matchAll(/`(specloop-[a-z-]+)`/g)) {
+      assert.ok(SKILLS.includes(ref), `${installed}: references unknown skill ${ref}`);
     }
   }
 });
 
-test("principles block is present and identical in the working skills", () => {
-  const blocks = PRINCIPLED.map((stage) => {
-    const skill = readFileSync(join(SKILLS_DIR, "specloop", stage, "SKILL.md"), "utf8");
-    const block = skill.match(/## Principles\n([\s\S]*?)\n## /)?.[1];
-    assert.ok(block, `${stage}: missing ## Principles`);
-    return block;
-  });
-  assert.ok(blocks.every((b) => b === blocks[0]), "principles blocks differ between skills");
-});
-
-test("every stage installs for every agent", () => {
+test("every global skill installs for every agent", () => {
   for (const agent of Object.keys(AGENT_DIRS)) {
     const target = tmp();
     init({ agent, target });
-    for (const stage of STAGES) {
-      assert.ok(existsSync(join(target, AGENT_DIRS[agent], `specloop-${stage}`, "SKILL.md")), `${agent}/${stage}`);
+    for (const skill of SKILLS) {
+      assert.ok(existsSync(join(target, AGENT_DIRS[agent], skill, "SKILL.md")), `${agent}/${skill}`);
     }
   }
 });

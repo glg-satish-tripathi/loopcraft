@@ -1,5 +1,5 @@
 ---
-name: specloop-verify
+name: specloop-verify-reference
 description: Verify a finished task, or all finished tasks, against its verify step, its file scope and the plan's acceptance criteria, then record the result in tasks.md. Use after implementing each task, when the user says "verify", or at the end to produce a summary usable as a PR description.
 license: MIT
 ---
@@ -26,7 +26,7 @@ Check the work with evidence. Passing means a check ran and succeeded, not that 
 ## Rules
 
 - Never mark `pass` for a check you did not run; say "not run" instead.
-- Do not fix code from this skill; report the failure and return to `specloop-implement`.
+- Do not fix code from this reference; report the failure and return to the implementation phase in `specloop`.
 - Edit only `tasks.md` (the verification record).
 
-**Next:** `specloop-implement` for the next task or a failure; `specloop-ship` only if the user asks to commit or open a PR; `specloop-handoff` to end the session.
+**Next:** return to the implementation phase in `specloop`, or use `specloop-ship` only if the user asks to commit or open a PR.

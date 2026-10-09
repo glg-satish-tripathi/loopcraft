@@ -1,5 +1,5 @@
 ---
-name: specloop-tasks
+name: specloop-tasks-reference
 description: Divide an approved plan into small ordered tasks at specs/<id>-slug/tasks.md, each tied to an acceptance criterion and carrying its own verify step, and amend the list when the plan changes. Use after the plan is approved and before coding, when the plan was amended, or when the user says "make tasks" or "break this down".
 license: MIT
 ---
@@ -10,8 +10,8 @@ Turn the plan into steps a person can review in a minute each.
 
 ## Steps
 
-1. Read `plan.md` (and `research.md` if present) in `specs/<id>-slug/`. If `plan.md` is missing or its `Status:` is not `Approved`, stop and recommend `specloop-plan`.
-2. Write `tasks.md` from [assets/tasks-template.md](assets/tasks-template.md) with `Status: Draft`.
+1. Read `plan.md` (and `research.md` if present) in `specs/<id>-slug/`. If `plan.md` is missing or its `Status:` is not `Approved`, stop and return to the plan phase in `specloop`.
+2. Write `tasks.md` from [assets/tasks-template.md](../assets/tasks-template.md) with `Status: Draft`.
 3. Make each task one concern, ideally one file or one behaviour. If a task needs "and", split it.
 4. Give every task: an ID (`T1`, `T2`, ...), the criteria it serves (`A1`, ...), the files it touches, and a **verify** step that is a runnable command or an observable check.
 5. Order by dependency. Put the test that proves a behaviour before the change that implements it. If the plan says the repo has no tests, the first task sets up the minimal test setup the user agreed to.
@@ -37,4 +37,4 @@ If the plan changed: keep done and verified tasks as they are, add or edit only 
 - Do not start implementing.
 - Write only `tasks.md`.
 
-**Next:** `specloop-implement` once approved. To end the session first, use `specloop-handoff`.
+**Next:** return to the implementation phase in `specloop` once approved.
