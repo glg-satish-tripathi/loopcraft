@@ -1,6 +1,6 @@
 ---
 name: specloop
-description: Run or continue a spec-driven delivery workflow in a repository: research, plan approval, task approval, implementation, verification, and handoff. Use when the user asks to start, plan, implement, verify, resume, or hand off work.
+description: Run or continue a spec-driven delivery workflow in a repository (research, plan approval, task approval, implementation, verification, and handoff). Use when the user asks to start, plan, implement, verify, resume, or hand off work.
 license: MIT
 ---
 

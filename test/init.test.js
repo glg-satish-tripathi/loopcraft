@@ -94,6 +94,8 @@ test("global workflow ships as three valid skills", () => {
     assert.ok(installed.length <= 64);
     const desc = skill.match(/^description: (.+)$/m)?.[1] ?? "";
     assert.ok(desc.length > 0 && desc.length <= 1024, `${installed}: description length`);
+    // Unquoted YAML scalars break on ": " or " #" (pi rejects them); quote the value if needed.
+    if (!/^["']/.test(desc)) assert.doesNotMatch(desc, /: | #/, `${installed}: description needs quoting or rewording for YAML`);
     assert.ok(skill.split("\n").length < 500, `${installed}: SKILL.md under 500 lines`);
     for (const [, link] of skill.matchAll(/\]\(([^)]+)\)/g)) {
       if (link.startsWith("http")) continue;
