@@ -1,3 +1,5 @@
+# IT'S STILL IN DEVELOPMENT.
+
 # SpecLoop
 
 SpecLoop is a spec-driven delivery workflow packaged as portable Agent Skills for Claude Code, Codex, and Pi.
