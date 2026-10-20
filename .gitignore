@@ -1,0 +1,2 @@
+# Loopcraft installer state (records hashes of installed skill files; local to each install destination)
+.loopcraft-manifest.json

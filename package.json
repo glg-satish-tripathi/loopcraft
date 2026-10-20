@@ -1,10 +1,10 @@
 {
-  "name": "satish-spec-loop",
+  "name": "loopcraft",
   "version": "0.0.1",
-  "description": "Spec-driven development workflow as Agent Skills for Claude Code, Codex and pi",
+  "description": "Loopcraft — spec-driven delivery workflow as Agent Skills for Claude Code, Codex and Pi",
   "type": "module",
   "bin": {
-    "specloop": "bin/specloop.js"
+    "loopcraft": "bin/loopcraft.js"
   },
   "files": [
     "bin",

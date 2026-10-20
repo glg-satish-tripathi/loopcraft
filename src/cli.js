@@ -5,8 +5,8 @@ import { AGENT_DIRS, init } from "./init.js";
 import { homedir } from "node:os";
 
 const USAGE = `Usage:
-  specloop init --agent <${Object.keys(AGENT_DIRS).join("|")}> [--dir <path>] [--global] [--dry-run] [--force]
-  specloop --version`;
+  loopcraft init --agent <${Object.keys(AGENT_DIRS).join("|")}> [--dir <path>] [--global] [--dry-run] [--force]
+  loopcraft --version`;
 
 export function main(argv, out = console) {
   let args;
