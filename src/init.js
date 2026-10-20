@@ -21,7 +21,7 @@ export const GLOBAL_AGENT_DIRS = {
 };
 
 const sha = (buf) => createHash("sha256").update(buf).digest("hex");
-const MANIFEST = ".specloop-manifest.json";
+const MANIFEST = ".loopcraft-manifest.json";
 
 function* walk(dir) {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
@@ -38,7 +38,7 @@ function installedPath(rel) {
 }
 
 // Returns [{path, action}] where action is "create" | "unchanged" | "update" | "conflict" | "overwrite".
-// A manifest lets later runs update files that SpecLoop installed previously while
+// A manifest lets later runs update files that Loopcraft installed previously while
 // preserving files changed by the user. --force remains available for legacy installs.
 export function init({ agent, target = homedir(), global = false, dryRun = false, force = false, skillsDir = SKILLS_DIR }) {
   const base = (global ? GLOBAL_AGENT_DIRS : AGENT_DIRS)[agent];

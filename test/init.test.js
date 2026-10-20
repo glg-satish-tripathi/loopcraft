@@ -6,21 +6,21 @@ import { test } from "node:test";
 import { main } from "../src/cli.js";
 import { AGENT_DIRS, GLOBAL_AGENT_DIRS, SKILLS_DIR, init } from "../src/init.js";
 
-const tmp = () => mkdtempSync(join(tmpdir(), "specloop-"));
+const tmp = () => mkdtempSync(join(tmpdir(), "loopcraft-"));
 const quiet = { log() {}, error() {} };
 
 test("claude installs under .claude/skills", () => {
   const target = tmp();
   init({ agent: "claude", target });
-  assert.ok(existsSync(join(target, ".claude/skills/specloop/SKILL.md")));
-  assert.ok(existsSync(join(target, ".claude/skills/specloop/assets/plan-template.md")));
+  assert.ok(existsSync(join(target, ".claude/skills/loopcraft/SKILL.md")));
+  assert.ok(existsSync(join(target, ".claude/skills/loopcraft/assets/plan-template.md")));
 });
 
 test("codex and pi install under .agents/skills", () => {
   for (const agent of ["codex", "pi"]) {
     const target = tmp();
     init({ agent, target });
-    assert.ok(existsSync(join(target, ".agents/skills/specloop/SKILL.md")), agent);
+    assert.ok(existsSync(join(target, ".agents/skills/loopcraft/SKILL.md")), agent);
   }
 });
 
@@ -28,7 +28,7 @@ test("global install uses each agent's user skill directory", () => {
   for (const agent of Object.keys(GLOBAL_AGENT_DIRS)) {
     const target = tmp();
     init({ agent, target, global: true });
-    assert.ok(existsSync(join(target, GLOBAL_AGENT_DIRS[agent], "specloop/SKILL.md")), agent);
+    assert.ok(existsSync(join(target, GLOBAL_AGENT_DIRS[agent], "loopcraft/SKILL.md")), agent);
   }
 });
 
@@ -55,7 +55,7 @@ test("rerun updates files installed by an earlier run", () => {
 test("edited file is kept as conflict, overwritten with force", () => {
   const target = tmp();
   init({ agent: "claude", target });
-  const file = join(target, ".claude/skills/specloop/SKILL.md");
+  const file = join(target, ".claude/skills/loopcraft/SKILL.md");
   writeFileSync(file, "mine");
   const kept = init({ agent: "claude", target });
   assert.ok(kept.some((r) => r.action === "conflict"));
@@ -83,7 +83,7 @@ test("cli: version and usage exit codes", () => {
   assert.equal(main(["bogus"], quiet), 2);
 });
 
-const SKILLS = ["specloop", "specloop-adr", "specloop-ship"];
+const SKILLS = ["loopcraft", "loopcraft-adr", "loopcraft-ship"];
 
 test("global workflow ships as three valid skills", () => {
   assert.deepEqual(readdirSync(SKILLS_DIR).sort(), [...SKILLS].sort());
@@ -102,7 +102,7 @@ test("global workflow ships as three valid skills", () => {
       assert.ok(existsSync(join(SKILLS_DIR, installed, link)), `${installed}: broken link ${link}`);
     }
     assert.match(skill, /^\*\*Next:\*\*/m, `${installed}: needs a **Next:** line`);
-    for (const [, ref] of skill.matchAll(/`(specloop-[a-z-]+)`/g)) {
+    for (const [, ref] of skill.matchAll(/`(loopcraft-[a-z-]+)`/g)) {
       assert.ok(SKILLS.includes(ref), `${installed}: references unknown skill ${ref}`);
     }
   }
