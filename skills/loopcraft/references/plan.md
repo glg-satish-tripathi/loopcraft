@@ -17,12 +17,22 @@ Decide how to do the task. Every design choice must trace to something the task 
 5. **Write `plan.md`** from [assets/plan-template.md](../assets/plan-template.md) with `Status: Draft`. Fill every section or delete it.
 6. **Write acceptance criteria** the task implies, each observable and checkable (a command, a test, a number). Mark criteria you inferred rather than read from the task.
 7. **Name the risks:** what can break, how it would be noticed, and how to undo the change.
-8. **Ask questions inline** where the answer changes the plan: one at a time, with options and a recommendation. Do not answer them yourself.
+8. **Ask questions inline** where the answer changes the plan: one at a time, with options and a recommendation. Do not answer them yourself. If the user asks to be grilled on the draft, use the Grilling section below; when the draft has unresolved ambiguities, offer it.
 9. **Present the plan and wait for approval.** When the user explicitly approves, set `Status: Approved (<date>)`. Never set it yourself.
 
 ## Amending an existing plan
 
 If implementation shows the plan is wrong: edit `plan.md` in place, add a dated line under "Changes" saying what changed and why, set `Status: Draft`, and get approval again. Then return to the tasks phase in `loopcraft` so task coverage is rechecked.
+
+## Grilling (on request)
+
+Run only when the user asks ("grill me", "interview me on this plan"); offer it when a draft has unresolved ambiguities.
+
+1. Interview the user relentlessly about the draft until you reach shared understanding; do not accept vague answers where a decision is needed.
+2. Walk each branch of the design tree one at a time, resolving decisions that other decisions depend on first.
+3. Ask one question at a time, with options and a recommendation where useful; update `plan.md` with each answer as it lands.
+4. Stop when every branch ends in a decision, a recorded open question, or an explicit "leave it".
+5. The plan stays in `Draft`; approval still requires step 9.
 
 ## ADR
 
@@ -38,7 +48,7 @@ Do not write an ADR unless the user asks. When asked, use `loopcraft-adr`.
 
 ## Rules
 
-- Prefer the simplest approach that meets the criteria; list rejected alternatives in one line each.
+- Prefer the simplest approach that meets the criteria, comparing options by complexity: anything in the structure that makes the system harder to understand or modify. List rejected alternatives in one line each.
 - Do not write code or edit files outside `specs/<id>-slug/plan.md`.
 - Do not post to or edit the issue.
 

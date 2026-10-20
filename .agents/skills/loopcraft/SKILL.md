@@ -33,6 +33,7 @@ Store work artifacts under `specs/<id>-slug/`: `research.md`, `plan.md`, `tasks.
 
 - State assumptions; ask when ambiguity changes the plan.
 - Make the smallest change that meets observable criteria.
+- Prefer the option that adds the least complexity: complexity is anything in the structure that makes the system harder to understand or modify.
 - Do not claim verification you did not run.
 - Keep changes traceable to an approved task.
 

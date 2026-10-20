@@ -18,10 +18,14 @@ Long sessions cost money. Capture only what a new session cannot cheaply redisco
 6. **Mark uncertainty:** anything you could not confirm from files, git or command output is written as "unconfirmed".
 7. Tell the user the path and the line to start the next session: `Use the loopcraft workflow on specs/<id>-slug`.
 
+## Human-readable handoff (on request)
+
+When the user asks for a handoff a person can read ("write a handoff for the team", "human-readable handoff"), also write `handoff-human.md` next to `handoff.md`, from [assets/handoff-human-template.md](../assets/handoff-human-template.md). It is plain prose for a person: complete sentences, what was done and why, how to run and verify it, current state, what is unverified, where to continue. Overwrite the previous one on re-run; never modify the agent `handoff.md` to make it.
+
 ## Rules
 
 - No secrets, tokens, environment values or long log output in the file.
 - Do not commit, push or post the file anywhere.
-- Write only `handoff.md`.
+- Write only `handoff.md` — plus `handoff-human.md` when the user asked for the human-readable version.
 
 **Next:** start a new session and use the `loopcraft` workflow.

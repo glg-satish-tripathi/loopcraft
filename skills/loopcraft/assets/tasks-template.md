@@ -7,7 +7,8 @@
   - Serves: A1
   - Files: `<path>`
   - Verify: `<command or observable check>`
-  - Verified: <pass | FAIL | not run> (<command>, <date>)   <- filled by loopcraft-verify
+  - Verified: <pass | FAIL | not run> (<date>)   <- filled by loopcraft-verify
+  - Evidence: Tests <command or not run> | Runtime <what was exercised or not run> | Visual <what was inspected or not run> | Not verified: <what remains unproven>   <- filled by loopcraft-verify
 
 ## Coverage
 | Criterion | Tasks |

@@ -24,6 +24,15 @@
 ## How to verify
 - Tests: `<command>`   Lint / build: `<command>`   (or "no tests in repo")
 
+## Rollout
+How this change is exposed, watched, and undone in its own context — answer `not applicable: <reason>` for internal or trivial changes.
+- **Gate it:** <how the change is disabled or reverted — flag, kill switch, revert plan>
+- **Start small:** <what limits blast radius — limited cohort, staging environment, dry-run, one consumer>
+- **Watch:** <which signals exist here — errors, costs, logs, alerts>
+- **Decide:** <when to expand or roll back>
+
+<Examples: a web feature gates behind a flag released to one cohort; a cloud resource applies to staging before production and watches cost and error signals.>
+
 ## Risks
 | Risk | Noticed by | Undo |
 |------|------------|------|

@@ -110,9 +110,12 @@ Examples:
 ```text
 Start work on issue #123. Begin with research only.
 Plan this feature using the existing Loopcraft workflow.
+Grill me on this plan until we agree.
 Continue the work in specs/123-health-check/.
 Implement the next approved task and verify it.
+Review the local diff with a fresh reviewer agent.
 Create a handoff for this work.
+Write a handoff a human can read.
 ```
 
 The workflow stops at explicit gates:
@@ -136,6 +139,16 @@ specs/<id>-slug/
 ```
 
 Project-specific conventions belong in the repository's `AGENTS.md`, `CLAUDE.md`, or equivalent. Loopcraft supplies the workflow; the repository supplies its commands, architecture, and constraints.
+
+## Design decisions
+
+### Tasks and criteria carry IDs (T1, A1) and live in tables
+
+Every task and acceptance criterion gets a stable ID, and each is a table row with fixed fields (Serves, Files, Verify, Verified), not a bullet in prose.
+
+This is not faster to write — it is faster to refer to. A bullet has no name, so pointing at it means quoting text that breaks when edited. An ID survives rewording, reordering, and insertion, which the artifacts need because they are amended constantly and re-read by fresh agent sessions in implement, verify, resume, and ship. IDs make coverage mechanical (every A-id must appear in at least one task), keep references true when tasks are inserted (new task becomes T9 between T8 and T10, nothing renumbers), and turn verification into a per-row record instead of a sentence. Fixed fields also make gaps visible: an empty Verify cell cannot hide the way a missing bullet sub-item can.
+
+The trade-off is ceremony on small changes; the format pays off exactly when state must survive across sessions, agents, and amendments — which is what this workflow is for. Larger decisions are recorded as ADRs under `docs/adr/`.
 
 ## Skill layout
 

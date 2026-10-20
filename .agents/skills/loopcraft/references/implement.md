@@ -12,7 +12,7 @@ Do the work the tasks describe, no more, and prove each task before the next.
 
 1. Read `tasks.md` and `plan.md` in `specs/<id>-slug/`. If `tasks.md` is missing or its `Status:` is not `Approved`, stop and return to the tasks phase in `loopcraft`.
 2. Take the first unchecked task whose dependencies are done. Say which one and restate it in one sentence.
-3. Where the task changes behaviour and the repo has a test setup, write the failing test first and show it fail.
+3. For programming tasks (application or library code), write the test for each behaviour as you write the code — failing test first where practical — and show it fail; that test becomes the Tests layer of the task's verification record. For declarative infra (e.g., Terraform), config, or docs tasks, skip unit tests; evidence comes from plan or apply output, dry-runs, and the Runtime and Visual layers.
 4. Make the smallest change that satisfies the task, matching surrounding code style. Touch only the files the task lists; if another file must change, say why before editing it.
 5. **Verify the task** using the verification phase in `loopcraft`. Do not tick it until verification passes.
 6. If verification fails, fix the cause once or twice; if it still fails, stop, report the failure with evidence, and leave the task unticked.
